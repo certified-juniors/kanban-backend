@@ -1,0 +1,12 @@
+main.exe
+/docs
+/assets
+/dist
+__debug_bin*
+/logs
+docker-compose.yaml
+.idea
+local.yaml
+dev.yaml
+prod.yaml
+
