@@ -24,14 +24,14 @@ func (h *Handler) CreateProject(w http.ResponseWriter, r *http.Request) {
 	var op string = "Projects.CreateProject"
 	log := h.log.With("op", op)
 
-	ownerId, ok := r.Context().Value("id").(uuid.UUID)
+	creatorId, ok := r.Context().Value("id").(uuid.UUID)
 	if !ok {
 		log.With("op", op).Error("missing id in context while creating project")
 		resp.WriteJSONResponse(w, http.StatusUnauthorized, "user not authorized", nil)
 		return
 	}
 
-	if ownerId == uuid.Nil {
+	if creatorId == uuid.Nil {
 		log.With("op", op).Error("missing id in context while creating project")
 		resp.WriteJSONResponse(w, http.StatusUnauthorized, "user not authorized", nil)
 		return
@@ -46,7 +46,7 @@ func (h *Handler) CreateProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	addedProject, err := h.projectsService.Create(r.Context(), project)
+	addedProject, err := h.projectsService.Create(r.Context(), project, creatorId)
 	if err != nil {
 		log.With("op", op).With("error", err).Error("error creating project")
 		resp.WriteJSONResponse(w, http.StatusInternalServerError, "error creating project", nil)
