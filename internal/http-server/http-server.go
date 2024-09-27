@@ -8,6 +8,7 @@ import (
 	taskservice "kanban/internal/domain/usecases/services/task_service"
 	userservice "kanban/internal/domain/usecases/services/user_service"
 	"kanban/internal/http-server/handlers"
+	"kanban/internal/http-server/middleware/authorization"
 	"kanban/internal/http-server/middleware/cors"
 	"kanban/internal/http-server/middleware/logger"
 	"log/slog"
@@ -72,12 +73,16 @@ func New(
 			r.Get("/me", h.Me)
 		})
 
-		r.Route("/projects", func(r chi.Router) {
-			r.Post("/", h.CreateProject)
-			r.Put("/", h.UpdateProject)
-			r.Delete("/{id}", h.DeleteProject)
-			r.Get("/{id}", h.GetProject)
-			r.Get("/", h.GetProjects)
+		r.Group(func(r chi.Router) {
+			r.Use(authorization.AuthorizationMiddleware(cfg.Auth.Secret))
+
+			r.Route("/projects", func(r chi.Router) {
+				r.Post("/", h.CreateProject)
+				r.Put("/", h.UpdateProject)
+				r.Delete("/{id}", h.DeleteProject)
+				r.Get("/{id}", h.GetProject)
+				r.Get("/", h.GetProjects)
+			})
 		})
 	})
 

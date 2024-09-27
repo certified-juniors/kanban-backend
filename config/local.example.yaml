@@ -7,6 +7,9 @@ http_server:
   write_timeout: 60
   idle_timeout: 20
 
+auth:
+  secret: "SUPER_SECRET_KEY"
+
 postgres:
   url: "postgres://postgres:3bYIJQ641c3G@194.190.152.220:5000/staging"
   auto_migrate: false

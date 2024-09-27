@@ -16,6 +16,7 @@ type Config struct {
 	Env             string         `yaml:"env"`
 	Logger          Logger         `yaml:"logger"`
 	Cronjob         Cronjob        `yaml:"cronjob"`
+	Auth            Auth           `yaml:"auth"`
 }
 
 type Logger struct {
