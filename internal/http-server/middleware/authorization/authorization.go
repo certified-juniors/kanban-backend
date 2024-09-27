@@ -36,7 +36,25 @@ func AuthorizationMiddleware(secret string) func(h http.Handler) http.Handler {
 				return
 			}
 
-			userID := claims["id"].(uuid.UUID)
+			customClaims, ok := claims["custom_claims"].(map[string]interface{})
+			if !ok {
+				http.Error(w, "Invalid custom claims", http.StatusUnauthorized)
+				return
+			}
+
+			userIDStr, ok := customClaims["id"].(string)
+			if !ok {
+				http.Error(w, "Invalid user ID", http.StatusUnauthorized)
+				return
+			}
+
+			userID, err := uuid.Parse(userIDStr)
+			if err != nil {
+				http.Error(w, "Invalid UUID format", http.StatusUnauthorized)
+				return
+			}
+
+			// TODO: Make all keys to constants (not hardcoded)
 			ctx := context.WithValue(r.Context(), "id", userID)
 
 			h.ServeHTTP(w, r.WithContext(ctx))

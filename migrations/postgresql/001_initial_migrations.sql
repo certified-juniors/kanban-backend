@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS projects (
 
 CREATE TABLE IF NOT EXISTS users_projects (
     user_id uuid REFERENCES users(id),
-    project_id uuid REFERENCES projects(id)
+    project_id uuid REFERENCES projects(id),
+    role VARCHAR(255) NOT NULL DEFAULT 'CREATOR'
 );
 
 CREATE TABLE IF NOT EXISTS sprints (
@@ -34,6 +35,10 @@ CREATE TABLE IF NOT EXISTS sprints (
     status VARCHAR(255) NOT NULL,
     project uuid REFERENCES projects(id) ON DELETE CASCADE
 );
+
+-- Add creator to sprints and tasks
+-- Work on changing from gen_random_uuid()
+-- Created at with timezone
 
 CREATE TABLE IF NOT EXISTS tasks (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
