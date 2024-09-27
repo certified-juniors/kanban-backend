@@ -8,7 +8,7 @@ http_server:
   idle_timeout: 20
 
 postgres:
-  url: "postgres://..."
+  url: "postgres://postgres:3bYIJQ641c3G@194.190.152.220:5000/staging"
   auto_migrate: false
   migrations: "./migrations/postgresql/001_initial_migrations.sql"
 

@@ -7,6 +7,7 @@ require (
 	github.com/fatih/color v1.17.0
 	github.com/go-chi/chi/v5 v5.0.14
 	github.com/go-playground/validator/v10 v10.22.1
+	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/google/go-querystring v1.1.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgconn v1.14.3
@@ -14,13 +15,13 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/stretchr/testify v1.9.0
-	github.com/swaggo/swag v1.16.3
 )
 
 require (
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
@@ -30,6 +31,7 @@ require (
 	github.com/jackc/puddle v1.3.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/swaggo/files/v2 v2.0.0 // indirect
+	github.com/swaggo/swag v1.16.3 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/text v0.16.0 // indirect

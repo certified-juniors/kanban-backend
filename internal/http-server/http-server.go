@@ -5,6 +5,7 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"kanban/internal/config"
 	taskservice "kanban/internal/domain/usecases/services/task_service"
+	userservice "kanban/internal/domain/usecases/services/user_service"
 	"kanban/internal/http-server/handlers"
 	"kanban/internal/http-server/middleware/cors"
 	"kanban/internal/http-server/middleware/logger"
@@ -20,10 +21,13 @@ import (
 func New(
 	log *slog.Logger,
 	cfg *config.Config,
-	taskService taskservice.TaskService) *chi.Mux {
+	taskService taskservice.TaskService,
+	userService userservice.UserService,
+) *chi.Mux {
 	h := handlers.NewHandler(
 		log,
 		taskService,
+		userService,
 	)
 
 	router := chi.NewRouter()
@@ -53,8 +57,16 @@ func New(
 			httpSwagger.URL(fmt.Sprintf("%s/swagger/doc.json", cfg.Swag.Endpoint)),
 		))
 	})
+
 	router.Route("/api/v1", func(r chi.Router) {
 		r.Get("/info", h.Info)
+
+		r.Route("/user", func(r chi.Router) {
+			r.Post("/register", h.Register)
+			r.Post("/login", h.Login)
+			r.Post("/logout", h.Logout)
+			r.Post("/me", h.Me)
+		})
 	})
 
 	return router

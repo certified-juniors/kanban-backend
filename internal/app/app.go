@@ -6,7 +6,9 @@ import (
 	"kanban/internal/config"
 	"kanban/internal/cronjobs"
 	taskspostgresrepo "kanban/internal/data/task_repo/task_postgres_repo"
+	userpostgresrepo "kanban/internal/data/user_repo/user_postgres_repo"
 	taskservice "kanban/internal/domain/usecases/services/task_service"
+	userservice "kanban/internal/domain/usecases/services/user_service"
 	httpserver "kanban/internal/http-server"
 	"kanban/internal/lib/logger/sl"
 	"kanban/internal/lib/postgresql"
@@ -36,16 +38,20 @@ func (a *App) Run() {
 	}
 
 	taskRepository := taskspostgresrepo.NewTaskPostgresRepository(postgres)
+	userRepository := userpostgresrepo.NewUserPostgresRepository(postgres)
 
 	taskService := taskservice.NewTaskService(
 		log,
 		taskRepository)
+	userService := userservice.NewUserService(
+		log,
+		userRepository)
 
 	cron := cronjobs.NewCronJob(taskService, log, 10) // TODO: кол-во воркеров убрать в конфиги
 	cron.Start(&cfg.Cronjob)
 	defer cron.Stop()
 
-	router := httpserver.New(log, cfg, taskService)
+	router := httpserver.New(log, cfg, taskService, userService)
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
