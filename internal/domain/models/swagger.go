@@ -13,3 +13,7 @@ type RegisterRequest struct {
 	MiddleName     string `json:"middle_name" example:"user"`
 	RepeatPassword string `json:"password" example:"password123"`
 }
+
+type CreateProjectsRequest struct {
+	Name string `json:"name" example:"New project"`
+}

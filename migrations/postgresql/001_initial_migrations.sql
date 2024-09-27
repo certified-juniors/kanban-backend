@@ -39,6 +39,9 @@ CREATE TABLE IF NOT EXISTS sprints (
 -- Add creator to sprints and tasks
 -- Work on changing from gen_random_uuid()
 -- Created at with timezone
+-- add parent_id as reference to tasks id
+-- change time to long
+-- change author to creator
 
 CREATE TABLE IF NOT EXISTS tasks (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,

@@ -2,30 +2,31 @@ package projectspostgresrepo
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"kanban/internal/domain/models"
 )
 
-func (r *ProjectsPostgresRepository) Insert(ctx context.Context, project models.Project) (*models.Project, error) {
+func (r *ProjectsPostgresRepository) Insert(ctx context.Context, project models.Project, creatorId uuid.UUID) (*models.Project, error) {
 	var createdProject models.Project
 	var insertProjectQuery string = `
 		INSERT INTO projects
-		(name, owner)
-		VALUES ($1, $2)
-		RETURNING id, name, owner
+		(name)
+		VALUES ($1)
+		RETURNING id, name
 	`
 
-	err := r.db.QueryRow(ctx, insertProjectQuery, project.Name, project.Owner).Scan(&createdProject.ID, &createdProject.Name, &createdProject.Owner)
+	err := r.db.QueryRow(ctx, insertProjectQuery, project.Name).Scan(&createdProject.ID, &createdProject.Name)
 	if err != nil {
 		return nil, err
 	}
 
 	var insertManyToManyQuery string = `
 		INSERT INTO users_projects
-		(user_id, project_id) 
-		VALUES ($1, $2)
+		(user_id, project_id, role) 
+		VALUES ($1, $2, $3)
 	`
 
-	_, err = r.db.Exec(ctx, insertManyToManyQuery, createdProject.Owner, createdProject.ID)
+	_, err = r.db.Exec(ctx, insertManyToManyQuery, creatorId, createdProject.ID, "CREATOR")
 	if err != nil {
 		return nil, err
 	}
