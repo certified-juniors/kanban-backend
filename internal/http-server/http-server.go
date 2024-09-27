@@ -81,7 +81,7 @@ func New(
 				r.Put("/", h.UpdateProject)
 				r.Delete("/{id}", h.DeleteProject)
 				r.Get("/{id}", h.GetProject)
-				r.Get("/", h.GetProjects)
+				r.Get("/{name}", h.GetProjects)
 			})
 		})
 	})

@@ -12,7 +12,7 @@ type ProjectsPostgresRepo interface {
 	Update(ctx context.Context, project models.Project, userId uuid.UUID) (*models.Project, error)
 	Delete(ctx context.Context, projectId, userId uuid.UUID) error
 	GetById(ctx context.Context, id uuid.UUID) (*models.Project, error)
-	GetAllBy(ctx context.Context) ([]models.Project, error)
+	GetAllBy(ctx context.Context, name string) ([]*models.Project, error)
 }
 
 type ProjectsPostgresRepository struct {

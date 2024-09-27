@@ -57,11 +57,42 @@ func (h *Handler) CreateProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetProjects(w http.ResponseWriter, r *http.Request) {
+	var op string = "Projects.GetProjects"
+	log := h.log.With("op", op)
 
+	name := chi.URLParam(r, "name")
+
+	projects, err := h.projectsService.GetAll(r.Context(), name)
+	if err != nil {
+		log.With("op", op).With("error", err).Error("error getting projects")
+		resp.WriteJSONResponse(w, http.StatusInternalServerError, "error getting projects", nil)
+		return
+	}
+
+	resp.WriteJSON(w, http.StatusOK, projects)
 }
 
 func (h *Handler) GetProject(w http.ResponseWriter, r *http.Request) {
+	var op string = "Projects.GetProject"
+	log := h.log.With("op", op)
 
+	idParam := chi.URLParam(r, "id")
+
+	id, err := uuid.Parse(idParam)
+	if err != nil {
+		log.With("op", op).With("error", err).Error("error parsing id")
+		resp.WriteJSONResponse(w, http.StatusBadRequest, "invalid id parameter", nil)
+		return
+	}
+
+	project, err := h.projectsService.GetByID(r.Context(), id)
+	if err != nil {
+		log.With("op", op).With("error", err).Error("error getting project")
+		resp.WriteJSONResponse(w, http.StatusInternalServerError, "error getting project", nil)
+		return
+	}
+
+	resp.WriteJSON(w, http.StatusOK, project)
 }
 
 func (h *Handler) UpdateProject(w http.ResponseWriter, r *http.Request) {
