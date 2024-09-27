@@ -68,14 +68,14 @@ func (h *Handler) UpdateProject(w http.ResponseWriter, r *http.Request) {
 	var op string = "Projects.UpdateProject"
 	log := h.log.With("op", op)
 
-	ownerId, ok := r.Context().Value("id").(uuid.UUID)
+	userId, ok := r.Context().Value("id").(uuid.UUID)
 	if !ok {
 		log.With("op", op).Error("missing id in context while updating project")
 		resp.WriteJSONResponse(w, http.StatusUnauthorized, "user not authorized", nil)
 		return
 	}
 
-	if ownerId == uuid.Nil {
+	if userId == uuid.Nil {
 		log.With("op", op).Error("missing id in context while updating project")
 		resp.WriteJSONResponse(w, http.StatusUnauthorized, "user not authorized", nil)
 		return
@@ -90,6 +90,14 @@ func (h *Handler) UpdateProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	updatedProject, err := h.projectsService.Update(r.Context(), project, userId)
+	if err != nil {
+		log.With("op", op).With("error", err).Error("error updating project")
+		resp.WriteJSONResponse(w, http.StatusInternalServerError, "error updating project", nil)
+		return
+	}
+
+	resp.WriteJSON(w, http.StatusOK, updatedProject)
 }
 
 func (h *Handler) DeleteProject(w http.ResponseWriter, r *http.Request) {

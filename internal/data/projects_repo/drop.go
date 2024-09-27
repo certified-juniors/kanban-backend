@@ -9,7 +9,7 @@ import (
 func (r *ProjectsPostgresRepository) Delete(ctx context.Context, projectId, ownerId uuid.UUID) error {
 	var selectRoleQuery string = `
 		SELECT role FROM users_projects
-		WHERE user_id = $1 AND project_id = $2;
+		WHERE user_id = $1 AND project_id = $2
 	`
 
 	var role string
@@ -20,7 +20,7 @@ func (r *ProjectsPostgresRepository) Delete(ctx context.Context, projectId, owne
 	}
 
 	if role != "CREATOR" {
-		return nil
+		return errors.New("invalid role")
 	}
 
 	var dropRowQuery string = `
