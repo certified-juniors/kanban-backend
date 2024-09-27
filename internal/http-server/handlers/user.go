@@ -15,8 +15,7 @@ import (
 // @Description Авторизация пользователя
 // @Tags User
 // @Router /user/login [post]
-// @Param email body string true "Почта"
-// @Param password body string true "Пароль"
+// @Param credentials body models.LoginRequest true "Почта и Пароль"
 // @Success 200 {object} models.AuthTokens "OK"
 // @Failure 400 {object} resp.Response "Bad request"
 // @Failure 500 {object} resp.Response "Internal server error"
@@ -48,12 +47,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 // @Description Регистрация пользователя
 // @Tags User
 // @Router /user/register [post]
-// @Param name body string true "Имя"
-// @Param surname body string true "Фамилия"
-// @Param middle_name body string false "Отчество"
-// @Param email body string true "Почта"
-// @Param password body string true "Пароль"
-// @Param repeat_password body string true "Повторите пароль"
+// @Param credentials body models.RegisterRequest true "Данные для регистрации"
 // @Success 201 {object} models.AuthTokens "Created"
 // @Success 400 {object} resp.Response "Bad request"
 // @Success 500 {object} resp.Response "Internal server error"
@@ -84,10 +78,12 @@ func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 	resp.WriteJSON(w, http.StatusOK, authTokens)
 }
 
+// TODO
 func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// TODO
 func (h *Handler) Me(w http.ResponseWriter, r *http.Request) {
 
 }
