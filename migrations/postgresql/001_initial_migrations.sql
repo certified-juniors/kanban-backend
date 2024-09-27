@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 CREATE TABLE IF NOT EXISTS projects (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    owner uuid NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS users_projects (

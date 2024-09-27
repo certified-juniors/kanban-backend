@@ -4,6 +4,7 @@ import (
 	"fmt"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"kanban/internal/config"
+	projectservice "kanban/internal/domain/usecases/services/project_service"
 	taskservice "kanban/internal/domain/usecases/services/task_service"
 	userservice "kanban/internal/domain/usecases/services/user_service"
 	"kanban/internal/http-server/handlers"
@@ -24,11 +25,13 @@ func New(
 	cfg *config.Config,
 	taskService taskservice.TaskService,
 	userService userservice.UserService,
+	projectsService projectservice.ProjectService,
 ) *chi.Mux {
 	h := handlers.NewHandler(
 		log,
 		taskService,
 		userService,
+		projectsService,
 	)
 
 	router := chi.NewRouter()
@@ -66,7 +69,15 @@ func New(
 			r.Post("/register", h.Register)
 			r.Post("/login", h.Login)
 			r.Post("/logout", h.Logout)
-			r.Post("/me", h.Me)
+			r.Get("/me", h.Me)
+		})
+
+		r.Route("/projects", func(r chi.Router) {
+			r.Post("/", h.CreateProject)
+			r.Put("/", h.UpdateProject)
+			r.Delete("/{id}", h.DeleteProject)
+			r.Get("/{id}", h.GetProject)
+			r.Get("/", h.GetProjects)
 		})
 	})
 
