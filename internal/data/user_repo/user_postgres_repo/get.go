@@ -17,7 +17,8 @@ func (r *UserPostgresRepository) Exists(ctx context.Context, email string) (*mod
 	var user models.User
 
 	query = `
-	SELECT * FROM users WHERE email = $1;
+	SELECT id, name, surname, middle_name, email, password FROM users
+	WHERE email = $1
 	`
 
 	rows, err := r.db.Query(ctx, query, email)
@@ -28,7 +29,7 @@ func (r *UserPostgresRepository) Exists(ctx context.Context, email string) (*mod
 	defer rows.Close()
 
 	for rows.Next() {
-		if err := rows.Scan(&user.ID, &user.Name, &user.Email); err != nil {
+		if err := rows.Scan(&user.ID, &user.Name, &user.Surname, &user.MiddleName, &user.Email, &user.Password); err != nil {
 			return nil, err
 		}
 	}

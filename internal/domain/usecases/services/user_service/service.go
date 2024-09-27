@@ -9,6 +9,9 @@ import (
 
 type UserService interface {
 	Register(ctx context.Context, credentials models.Credentials) (*models.AuthTokens, error)
+	Login(ctx context.Context, credentials models.Credentials) (*models.AuthTokens, error)
+	Logout(ctx context.Context) error
+	Me(ctx context.Context) (*models.User, error)
 }
 
 type Service struct {
