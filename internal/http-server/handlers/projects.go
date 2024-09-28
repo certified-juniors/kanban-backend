@@ -56,6 +56,15 @@ func (h *Handler) CreateProject(w http.ResponseWriter, r *http.Request) {
 	resp.WriteJSON(w, http.StatusCreated, addedProject)
 }
 
+// GetProjects Получить проекты
+// @Summary Получение проектов
+// @Description Получение проекта по его названию
+// @Tags Projects
+// @Router /projects/{name} [get]
+// @Param name path string false "Название проекта"
+// @Success 200 {object} []models.Project "OK"
+// @Success 400 {object} resp.Response "Bad Request"
+// @Success 500 {object} resp.Response "Internal Server Error"
 func (h *Handler) GetProjects(w http.ResponseWriter, r *http.Request) {
 	var op string = "Projects.GetProjects"
 	log := h.log.With("op", op)
@@ -72,6 +81,14 @@ func (h *Handler) GetProjects(w http.ResponseWriter, r *http.Request) {
 	resp.WriteJSON(w, http.StatusOK, projects)
 }
 
+// GetProject Получить проект
+// @Summary Получение проекта по id
+// @Description Получение проекта по id
+// @Tags Projects
+// @Router /projects [get]
+// @Success 200 {object} models.Project "OK"
+// @Success 400 {object} resp.Response "Bad Request"
+// @Success 500 {object} resp.Response "Internal Server Error"
 func (h *Handler) GetProject(w http.ResponseWriter, r *http.Request) {
 	var op string = "Projects.GetProject"
 	log := h.log.With("op", op)
@@ -95,6 +112,15 @@ func (h *Handler) GetProject(w http.ResponseWriter, r *http.Request) {
 	resp.WriteJSON(w, http.StatusOK, project)
 }
 
+// UpdateProject Обновить данные проекта
+// @Summary Обновление данных проекта
+// @Description Обновление данных проекта, обновлять может только владелец
+// @Tags Projects
+// @Router /projects [put]
+// @Param project body models.Project false "Проект"
+// @Success 200 {object} models.Project "OK"
+// @Success 400 {object} resp.Response "Bad Request"
+// @Success 500 {object} resp.Response "Internal Server Error"
 func (h *Handler) UpdateProject(w http.ResponseWriter, r *http.Request) {
 	var op string = "Projects.UpdateProject"
 	log := h.log.With("op", op)
@@ -131,6 +157,15 @@ func (h *Handler) UpdateProject(w http.ResponseWriter, r *http.Request) {
 	resp.WriteJSON(w, http.StatusOK, updatedProject)
 }
 
+// DeleteProject Удалить проект
+// @Summary Удаление проекта
+// @Description Удалить проект может только владелец проекта
+// @Tags Projects
+// @Router /projects/{id} [post]
+// @Param id path string true "id проекта"
+// @Success 200 {object} models.Project "OK"
+// @Failure 400 {object} resp.Response "Bad Request"
+// @Failure 500 {object} resp.Response "Internal Server Error"
 func (h *Handler) DeleteProject(w http.ResponseWriter, r *http.Request) {
 	var op string = "Projects.DeleteProject"
 	log := h.log.With("op", op)
